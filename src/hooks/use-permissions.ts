@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useWorkspace } from '@/lib/workspace-context';
-import { 
-  getUserPermissions, 
-  hasPermission, 
+import { supabase } from '@/lib/supabase/client';
+import {
+  getUserPermissions,
+  hasPermission,
   getAllPermissions,
-  getPermissionsByCategory 
+  getPermissionsByCategory
 } from '@/lib/supabase/permissions-api';
 import { Permission, UserPermissions } from '@/lib/types/workspace';
 
@@ -35,13 +36,13 @@ export function usePermissions(projectId?: string): UsePermissionsResult {
     try {
       setLoading(true);
       setError(null);
-      
+
       const userPermissions = await getUserPermissions(
-        user.id, 
-        currentWorkspace.id, 
+        user.id,
+        currentWorkspace.id,
         projectId
       );
-      
+
       setPermissions(userPermissions);
     } catch (err) {
       console.error('Error loading permissions:', err);
@@ -56,28 +57,55 @@ export function usePermissions(projectId?: string): UsePermissionsResult {
     loadPermissions();
   }, [loadPermissions]);
 
+  // Set up real-time subscription for permission changes
+  useEffect(() => {
+    if (!user || !currentWorkspace) return;
+
+    // Subscribe to user_permissions table changes for this user
+    const subscription = supabase
+      .channel('user-permissions-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'user_permissions',
+          filter: `user_id=eq.${user.id}`
+        },
+        () => {
+          // Refresh permissions on any change
+          loadPermissions();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [user, currentWorkspace, loadPermissions]);
+
   const hasPermissionLocal = useCallback((permissionName: string, checkProjectId?: string) => {
     // Check workspace permissions first
     const hasWorkspacePermission = permissions.workspace.some(p => p.name === permissionName);
     if (hasWorkspacePermission) return true;
-    
+
     // Check project permissions if project context
     if (checkProjectId || projectId) {
       const hasProjectPermission = permissions.project.some(p => p.name === permissionName);
       return hasProjectPermission;
     }
-    
+
     return false;
   }, [permissions, projectId]);
 
   const checkPermissionAsync = useCallback(async (permissionName: string, checkProjectId?: string) => {
     if (!user || !currentWorkspace) return false;
-    
+
     try {
       return await hasPermission(
-        user.id, 
-        currentWorkspace.id, 
-        permissionName, 
+        user.id,
+        currentWorkspace.id,
+        permissionName,
         checkProjectId || projectId
       );
     } catch (err) {
@@ -114,12 +142,12 @@ export function useAllPermissions(): UseAllPermissionsResult {
       try {
         setLoading(true);
         setError(null);
-        
+
         const [permissions, categorizedPermissions] = await Promise.all([
           getAllPermissions(),
           getPermissionsByCategory()
         ]);
-        
+
         setAllPermissions(permissions);
         setPermissionsByCategory(categorizedPermissions);
       } catch (err) {
