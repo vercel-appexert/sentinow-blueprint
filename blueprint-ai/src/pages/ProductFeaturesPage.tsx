@@ -79,7 +79,7 @@ export function ProductFeaturesPage() {
           </div>
 
           {/* Feature 1 */}
-          <div className="flex flex-col md:flex-row gap-20 mb-32">
+          <div className="flex flex-col md:flex-row gap-20 my-56">
             <div className="flex-1">
               <div className="mb-6">
                 <div className="h-12 w-12 rounded-full bg-primary flex items-center justify-center mb-5">
@@ -128,7 +128,7 @@ export function ProductFeaturesPage() {
           </div>
 
           {/* Feature 2 */}
-          <div className="flex flex-col md:flex-row-reverse gap-20 mb-32">
+          <div className="flex flex-col md:flex-row-reverse gap-20 my-56">
             <div className="flex-1">
               <div className="mb-6">
                 <div className="h-12 w-12 rounded-full bg-primary flex items-center justify-center mb-5">
@@ -177,7 +177,7 @@ export function ProductFeaturesPage() {
           </div>
 
           {/* Feature 3 */}
-          <div className="flex flex-col md:flex-row gap-20 mb-32">
+          <div className="flex flex-col md:flex-row gap-20 my-56">
             <div className="flex-1">
               <div className="mb-6">
                 <div className="h-12 w-12 rounded-full bg-primary flex items-center justify-center mb-5">
@@ -226,7 +226,7 @@ export function ProductFeaturesPage() {
           </div>
 
           {/* Feature 4 - Integrations */}
-          <div className="flex flex-col md:flex-row-reverse gap-20 mb-32">
+          <div className="flex flex-col md:flex-row-reverse gap-20 my-56">
             <div className="flex-1">
               <div className="mb-6">
                 <div className="h-12 w-12 rounded-full bg-primary flex items-center justify-center mb-5">
@@ -275,7 +275,7 @@ export function ProductFeaturesPage() {
           </div>
 
           {/* Feature 5 - Run */}
-          <div className="flex flex-col md:flex-row gap-20 mb-16">
+          <div className="flex flex-col md:flex-row gap-20 my-40">
             <div className="flex-1">
               <div className="mb-6">
                 <div className="h-12 w-12 rounded-full bg-primary flex items-center justify-center mb-5">
@@ -332,4 +332,3 @@ export function ProductFeaturesPage() {
     </div>
   );
 }
-
