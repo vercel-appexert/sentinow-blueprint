@@ -61,7 +61,15 @@ export function ProductFeaturesPage() {
 
       {/* Features Section */}
       <section className="py-24 relative bg-accent/20">
-        <div className="container mx-auto px-4">
+        {/* Subtle Background Pattern */}
+        <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.05]">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, rgba(0,0,0,0.15) 1px, transparent 0)`,
+            backgroundSize: '20px 20px'
+          }}></div>
+        </div>
+        
+        <div className="container relative mx-auto px-4">
           {/* Section Header */}
           <div className="max-w-3xl mx-auto text-center mb-20">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Powerful Features for Modern QA Teams</h2>
@@ -324,5 +332,4 @@ export function ProductFeaturesPage() {
     </div>
   );
 }
-
 
